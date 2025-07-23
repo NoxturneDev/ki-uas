@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use Illuminate\Support\Str;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Filament\Models\Contracts\FilamentUser;
@@ -26,6 +27,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
         'name',
         'email',
         'password',
+        'api_token',
     ];
 
     /**
@@ -49,6 +51,17 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    protected static function boot(){
+        parent::boot();
+
+        static::creating(function ($user) {
+            // Generate secret token
+            if (empty($user->api_token)) {
+                $user->api_token = Str::random(5);
+            }
+        });
     }
 
     public function getFilamentAvatarUrl(): ?string

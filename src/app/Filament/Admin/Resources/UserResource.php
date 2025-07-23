@@ -120,6 +120,9 @@ class UserResource extends Resource
                     ->date()
                     ->sortable()
                     ->searchable(),
+                Tables\Columns\TextColumn::make('api_token')
+                    ->searchable()
+                    ->copyable(),
 
             ])
             ->filters([
